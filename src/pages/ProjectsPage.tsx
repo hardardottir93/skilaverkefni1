@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocalStorage } from "../shared/hooks/useLocalStorage";
 import { storageSchema } from "../shared/schemas/storageSchema";
+import ProjectCard from "../features/projects/ProjectCard";
 
 export default function ProjectsPage() {
   const [storedData, setStoredData] = useLocalStorage(
@@ -68,22 +69,13 @@ export default function ProjectsPage() {
 
       <div>
         <h2>Projects count: {filteredProjects.length}</h2>
-
         <div style={{ display: "grid", gap: "12px" }}>
           {filteredProjects.map((project) => (
-            <div
+            <ProjectCard
               key={project.id}
-              style={{
-                border: "1px solid #e5e7eb",
-                borderRadius: "10px",
-                padding: "12px",
-              }}
-            >
-              <h3 style={{ margin: "0 0 8px" }}>{project.name}</h3>
-              <p style={{ margin: 0, color: "#4b5563" }}>
-                {project.description}
-              </p>
-            </div>
+              name={project.name}
+              description={project.description}
+            />
           ))}
         </div>
       </div>
