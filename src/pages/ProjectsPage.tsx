@@ -1,4 +1,33 @@
+import { useLocalStorage } from "../shared/hooks/useLocalStorage";
+import { storageSchema } from "../shared/schemas/storageSchema";
+
 export default function ProjectsPage() {
+  const [storedData, setStoredData] = useLocalStorage(
+    "team-task-hub",
+    { projects: [], tasks: [] },
+    storageSchema,
+  );
+
+  function handleAddTestProject() {
+    setStoredData({
+      ...storedData,
+      projects: [
+        ...storedData.projects,
+        {
+          id: crypto.randomUUID(),
+          name: "Test Project",
+          description: "Testing localStorage",
+          createdAt: new Date().toISOString(),
+        },
+      ],
+    });
+  }
+
+  function handleClearStorage() {
+    localStorage.removeItem("team-task-hub");
+    window.location.reload();
+  }
+
   return (
     <main
       style={{
@@ -8,74 +37,34 @@ export default function ProjectsPage() {
       }}
     >
       <h1 style={{ marginTop: 0 }}>Team Task Hub</h1>
-      <p style={{ color: "#6b7280" }}>
-        Projects, tasks and dashboard will live here.
-      </p>
+      <p style={{ color: "#6b7280" }}>Testing useLocalStorage hook</p>
 
-      <section
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: "16px",
-          marginTop: "24px",
-          marginBottom: "24px",
-        }}
-      >
-        <div style={cardStyle}>
-          <h3>Total Tasks</h3>
-          <p style={numberStyle}>12</p>
-        </div>
-        <div style={cardStyle}>
-          <h3>Completed</h3>
-          <p style={numberStyle}>5</p>
-        </div>
-        <div style={cardStyle}>
-          <h3>Open</h3>
-          <p style={numberStyle}>7</p>
-        </div>
-        <div style={cardStyle}>
-          <h3>High Priority</h3>
-          <p style={numberStyle}>3</p>
-        </div>
-      </section>
+      <div style={{ display: "flex", gap: "12px", marginBottom: "20px" }}>
+        <button onClick={handleAddTestProject}>Add test project</button>
+        <button onClick={handleClearStorage}>Clear storage</button>
+      </div>
 
-      <section
-        style={{
-          display: "grid",
-          gridTemplateColumns: "280px 1fr",
-          gap: "24px",
-        }}
-      >
-        <div style={panelStyle}>
-          <h2>Projects</h2>
-          <p>Project list will be here.</p>
-        </div>
+      <div>
+        <h2>Projects count: {storedData.projects.length}</h2>
 
-        <div style={panelStyle}>
-          <h2>Tasks</h2>
-          <p>Tasks for the selected project will be here.</p>
+        <div>
+          {storedData.projects.map((project) => (
+            <div
+              key={project.id}
+              style={{
+                border: "1px solid #e5e7eb",
+                borderRadius: "10px",
+                padding: "12px",
+              }}
+            >
+              <h3 style={{ margin: "0 0 8px" }}>{project.name}</h3>
+              <p style={{ margin: 0, color: "#4b5563" }}>
+                {project.description}
+              </p>
+            </div>
+          ))}
         </div>
-      </section>
+      </div>
     </main>
   );
 }
-
-const cardStyle = {
-  background: "white",
-  borderRadius: "12px",
-  padding: "16px",
-  boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-};
-
-const numberStyle = {
-  fontSize: "28px",
-  fontWeight: "bold",
-  margin: "8px 0 0",
-};
-
-const panelStyle = {
-  background: "white",
-  borderRadius: "12px",
-  padding: "20px",
-  boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-};
