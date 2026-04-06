@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useLocalStorage } from "../shared/hooks/useLocalStorage";
 import { storageSchema } from "../shared/schemas/storageSchema";
 
@@ -7,6 +8,8 @@ export default function ProjectsPage() {
     { projects: [], tasks: [] },
     storageSchema,
   );
+
+  const [search, setSearch] = useState("");
 
   function handleAddTestProject() {
     setStoredData({
@@ -28,6 +31,10 @@ export default function ProjectsPage() {
     window.location.reload();
   }
 
+  const filteredProjects = storedData.projects.filter((project) =>
+    project.name.toLowerCase().includes(search.toLowerCase()),
+  );
+
   return (
     <main
       style={{
@@ -44,11 +51,26 @@ export default function ProjectsPage() {
         <button onClick={handleClearStorage}>Clear storage</button>
       </div>
 
-      <div>
-        <h2>Projects count: {storedData.projects.length}</h2>
+      <input
+        type="text"
+        placeholder="Search projects..."
+        value={search}
+        onChange={(event) => setSearch(event.target.value)}
+        style={{
+          padding: "10px 12px",
+          border: "1px solid #d1d5db",
+          borderRadius: "10px",
+          marginBottom: "20px",
+          width: "100%",
+          maxWidth: "300px",
+        }}
+      />
 
-        <div>
-          {storedData.projects.map((project) => (
+      <div>
+        <h2>Projects count: {filteredProjects.length}</h2>
+
+        <div style={{ display: "grid", gap: "12px" }}>
+          {filteredProjects.map((project) => (
             <div
               key={project.id}
               style={{
