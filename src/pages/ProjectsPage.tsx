@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLocalStorage } from "../shared/hooks/useLocalStorage";
 import { storageSchema } from "../shared/schemas/storageSchema";
 import ProjectCard from "../features/projects/ProjectCard";
+import TaskForm from "../features/tasks/TaskForm";
 
 export default function ProjectsPage() {
   const [storedData, setStoredData] = useLocalStorage(
@@ -50,6 +51,14 @@ export default function ProjectsPage() {
       <div style={{ display: "flex", gap: "12px", marginBottom: "20px" }}>
         <button onClick={handleAddTestProject}>Add test project</button>
         <button onClick={handleClearStorage}>Clear storage</button>
+      </div>
+
+      <div style={{ marginBottom: "20px" }}>
+        <TaskForm
+          onAddTask={(task) => {
+            console.log("New task:", task);
+          }}
+        />
       </div>
 
       <input
