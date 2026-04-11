@@ -1,73 +1,95 @@
-# React + TypeScript + Vite
+# Team Task Hub
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Team Task Hub is a React + TypeScript application for managing projects and tasks.  
+Users can create projects, add tasks to each project, edit and delete tasks, mark tasks as completed, search tasks, filter them by status and priority, and view simple dashboard statistics.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- View all projects
+- Create a new project
+- Select a project and view its tasks
+- Add a new task
+- Edit a task
+- Delete a task
+- Mark a task as completed / not completed
+- Search tasks
+- Filter tasks by status
+- Filter tasks by priority
+- View dashboard statistics
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React
+- TypeScript
+- Vite
+- Zustand for global state management
+- Zod for validation
+- localStorage for data persistence
+- Tailwind CSS
+- shadcn/ui
 
-## Expanding the ESLint configuration
+## Project Structure
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+src/
+  components/
+    ui/
+  features/
+    projects/
+    tasks/
+  pages/
+  shared/
+    hooks/
+    schemas/
+    store/
+    lib/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Validation and Persistence
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Form validation is handled with **Zod**
+- Projects and tasks are stored in **localStorage**
+- Stored data is validated with typed parsing when read from localStorage
+- Data persists after page refresh
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## State Management
+
+Global state is handled with **Zustand**.
+
+The store manages:
+
+- projects
+- tasks
+- selected project
+- add / update / delete actions
+- toggle complete action
+
+## Getting Started
+
+### Install dependencies
+
+```bash
+npm install
 ```
+
+### Run the development server
+
+```bash
+npm run dev
+```
+
+### Build the project
+
+```bash
+npm run build
+```
+
+### Preview production build
+
+```bash
+npm run preview
+```
+
+## Author
+
+Hafrún Harðardóttir
