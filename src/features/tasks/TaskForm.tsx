@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { createTaskSchema } from "../../shared/schemas/taskSchema";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Textarea } from "../../components/ui/textarea";
 
 type TaskFormProps = {
   onAddTask: (task: {
     title: string;
     description?: string;
-    status: "todo" | "in_progress" | "done";
     priority: "low" | "medium" | "high";
   }) => void;
 };
@@ -13,7 +15,6 @@ type TaskFormProps = {
 export default function TaskForm({ onAddTask }: TaskFormProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState<"todo" | "in_progress" | "done">("todo");
   const [priority, setPriority] = useState<"low" | "medium" | "high">("medium");
   const [error, setError] = useState("");
 
@@ -23,7 +24,7 @@ export default function TaskForm({ onAddTask }: TaskFormProps) {
     const result = createTaskSchema.safeParse({
       title,
       description,
-      status,
+      status: "todo",
       priority,
     });
 
@@ -33,66 +34,83 @@ export default function TaskForm({ onAddTask }: TaskFormProps) {
     }
 
     setError("");
-
-    onAddTask(result.data);
+    onAddTask({
+      title: result.data.title,
+      description: result.data.description,
+      priority: result.data.priority,
+    });
 
     setTitle("");
     setDescription("");
-    setStatus("todo");
     setPriority("medium");
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: "grid", gap: "12px" }}>
-      <input
+    <form onSubmit={handleSubmit} className="grid gap-3">
+      <Input
         type="text"
         placeholder="Task title"
         value={title}
         onChange={(event) => setTitle(event.target.value)}
-        style={inputStyle}
       />
 
-      <input
-        type="text"
+      <Textarea
         placeholder="Task description"
         value={description}
         onChange={(event) => setDescription(event.target.value)}
-        style={inputStyle}
+        className="min-h-[90px]"
       />
 
-      <select
-        value={status}
-        onChange={(event) =>
-          setStatus(event.target.value as "todo" | "in_progress" | "done")
-        }
-        style={inputStyle}
-      >
-        <option value="todo">Todo</option>
-        <option value="in_progress">In Progress</option>
-        <option value="done">Done</option>
-      </select>
+      <div className="grid gap-2">
+        <p className="m-0 text-sm font-medium text-slate-700">Priority</p>
 
-      <select
-        value={priority}
-        onChange={(event) =>
-          setPriority(event.target.value as "low" | "medium" | "high")
-        }
-        style={inputStyle}
-      >
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
-      </select>
+        <div className="flex gap-2">
+          <Button
+            type="button"
+            variant={priority === "low" ? "default" : "outline"}
+            onClick={() => setPriority("low")}
+            className={
+              priority === "low"
+                ? "bg-slate-700 text-white hover:bg-slate-800"
+                : ""
+            }
+          >
+            Low
+          </Button>
 
-      {error && <p style={{ color: "red", margin: 0 }}>{error}</p>}
+          <Button
+            type="button"
+            variant={priority === "medium" ? "default" : "outline"}
+            onClick={() => setPriority("medium")}
+            className={
+              priority === "medium"
+                ? "bg-amber-500 text-white hover:bg-amber-600"
+                : ""
+            }
+          >
+            Medium
+          </Button>
 
-      <button type="submit">Add Task</button>
+          <Button
+            type="button"
+            variant={priority === "high" ? "default" : "outline"}
+            onClick={() => setPriority("high")}
+            className={
+              priority === "high"
+                ? "bg-red-500 text-white hover:bg-red-600"
+                : ""
+            }
+          >
+            High
+          </Button>
+        </div>
+      </div>
+
+      {error && <p className="m-0 text-sm text-red-600">{error}</p>}
+
+      <Button type="submit" className="w-fit">
+        Add Task
+      </Button>
     </form>
   );
 }
-
-const inputStyle: React.CSSProperties = {
-  padding: "10px 12px",
-  border: "1px solid #d1d5db",
-  borderRadius: "10px",
-};

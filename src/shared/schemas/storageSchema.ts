@@ -12,7 +12,7 @@ export const taskSchema = z.object({
   projectId: z.string(),
   title: z.string(),
   description: z.string().optional(),
-  status: z.enum(["todo", "in_progress", "done"]),
+  status: z.enum(["todo", "done"]),
   priority: z.enum(["low", "medium", "high"]),
   completed: z.boolean(),
   createdAt: z.string(),
